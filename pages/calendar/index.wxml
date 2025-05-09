@@ -1,0 +1,94 @@
+<!-- page.wxml -->
+<van-button type="primary" bindtap="onDisplay">
+  预约时间：{{ date || '选择预约时间' }}
+</van-button>
+
+<!-- 日历组件 -->
+<van-calendar
+  show="{{ showCalendar }}"
+  bind:close="onClose"
+  bind:confirm="onConfirm"
+  min-date="{{ minDate }}"
+  max-date="{{ maxDate }}"
+/>
+
+<!-- 时间选择弹窗 -->
+<van-popup 
+  show="{{ showTimePicker }}"
+  position="bottom"
+  round
+  bind:close="onPickerClose"
+>
+  <van-picker
+    show-toolbar
+    title="选择时间"
+    columns="{{ columns }}"
+    bind:cancel="onPickerClose"
+    bind:confirm="onTimeConfirm"
+  />
+</van-popup>
+
+<!-- 确认时间弹窗 -->
+<van-dialog
+  id="confirmDialog"
+  show="{{ confirmShow }}"
+  title="确认预约"
+  message="您确定预约{{ finalDateTime }}吗？"
+  show-cancel-button
+  bind:confirm="onFinalConfirm"
+  bind:cancel="onCancelConfirm"
+/>
+<!-- 周一无课提示 -->
+<van-dialog
+  show="{{ showMondayAlert }}"
+  title="提示"
+  message="周一没有排课安排"
+  show-confirm-button
+  confirm-button-text="知道了"
+  bind:confirm="onConfirmMonday"
+/>
+<van-button 
+  type="primary" 
+  bindtap="onShowRecords"
+>预约记录</van-button>
+
+<van-popup 
+  show="{{ showRecordPopup }}" 
+  position="bottom"
+  closeable
+>
+  <!-- 新增顶部操作栏 -->
+  <view class="popup-header">
+    <text>我的预约记录</text>
+    <van-icon 
+      name="cross" 
+      size="24rpx" 
+      bindtap="onClosePopup"
+    />
+  </view>
+  <view class="record-container">
+    <!-- 加载状态 -->
+    <van-loading wx:if="{{ isLoading }}" size="24px">加载中...</van-loading>
+
+    <!-- 数据列表 -->
+    <scroll-view 
+      wx:else
+      scroll-y 
+      style="height:100%"
+    >
+      <block wx:for="{{ appointments }}" wx:key="_id">
+        <view class="record-item">
+          <text class="date">{{ item.date }}</text>
+          <text class="time">{{ item.time }}</text>
+          <text class="status">{{ item.status || '已预约' }}</text>
+        </view>
+      </block>
+
+      <!-- 空状态 -->
+      <van-empty 
+        wx:if="{{ !appointments.length && !isLoading }}"
+        description="暂无即将到来的预约"
+      />
+    </scroll-view>
+  </view>
+</van-popup>
