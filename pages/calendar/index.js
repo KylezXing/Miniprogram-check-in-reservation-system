@@ -1,6 +1,6 @@
 // pages/calendar/index.js
 import Toast from '@vant/weapp/toast/toast';
-// const db = wx.cloud.database()
+const db = wx.cloud.database()
 // const appointments = db.collection('appointments')
 Page(
     {
