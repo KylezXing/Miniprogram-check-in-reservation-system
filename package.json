@@ -9,6 +9,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@cloudbase/wx-cloud-client-sdk": "^1.5.0",
     "@vant/weapp": "^1.11.7",
     "miniprogram-sm-crypto": "^0.3.13"
   }
