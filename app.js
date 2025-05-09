@@ -16,7 +16,7 @@ App({
         const client = init(wx.cloud)
         const models = client.models
 
-        // const db = wx.cloud.database()
+        const db = wx.cloud.database()
         // 登录
         wx.login({
             success: res => {
