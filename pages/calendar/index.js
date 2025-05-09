@@ -86,59 +86,59 @@ Page(
       confirmShow: true      // 显示二次确认弹窗
     });
   },
-    // 新增最终确认方法
-    // onFinalConfirm() {
-    //     Toast.success(`预约已确认：${this.data.finalDateTime}`);
-    //     this.setData({ confirmShow: false });
-    //     },
-    //     onFinalConfirm() {
-    //         // 显示加载状态
-    //         wx.showLoading({
-    //           title: '提交中...',
-    //         })
+   // 新增最终确认方法
+    onFinalConfirm() {
+        Toast.success(`预约已确认：${this.data.finalDateTime}`);
+        this.setData({ confirmShow: false });
+        },
+        onFinalConfirm() {
+            // 显示加载状态
+            wx.showLoading({
+              title: '提交中...',
+            })
         
-    //         // 获取用户OpenID
-    //         const that = this;
-    //         wx.cloud.callFunction({
-    //           name: 'getOpenId'
-    //         }).then(res => {
-    //           // 构建数据对象
+            // 获取用户OpenID
+            const that = this;
+            wx.cloud.callFunction({
+              name: 'getOpenId'
+            }).then(res => {
+              // 构建数据对象
               
-    //           const appointmentData = {
-    //             date: that.data.date,          // 用户选择的日期
-    //             time: that.data.selectedTime,  // 用户选择的时间
-    //             openid: res.result.openid,     // 用户唯一标识
-    //             createTime: db.serverDate()    // 服务器时间
-    //           }
+              const appointmentData = {
+                date: that.data.date,          // 用户选择的日期
+                time: that.data.selectedTime,  // 用户选择的时间
+                openid: res.result.openid,     // 用户唯一标识
+                createTime: db.serverDate()    // 服务器时间
+              }
         
-    //           // 写入数据库
-    //           return db.collection('appointments').add({
-    //             data: appointmentData
-    //           })
-    //         }).then(res => {
-    //           wx.hideLoading()
-    //           wx.showToast({
-    //             title: '预约成功',
-    //             icon: 'success'
-    //           })
-    //           that.setData({ confirmShow: false })
-    //           console.log('写入成功，记录ID：', res._id)
-    //         }).catch(err => {
-    //           wx.hideLoading()
-    //           wx.showToast({
-    //             title: '提交失败',
-    //             icon: 'none'
-    //           })
-    //           console.error('数据库写入失败：', err)
-    //         })
-    //       },
-    //   // 新增取消确认方法
-    //   onCancelConfirm() {
-    //     this.setData({ 
-    //       confirmShow: false,
-    //       showTimePicker: true // 返回时间选择器
-    //     });
-    //   },
+              // 写入数据库
+              return db.collection('appointments').add({
+                data: appointmentData
+              })
+            }).then(res => {
+              wx.hideLoading()
+              wx.showToast({
+                title: '预约成功',
+                icon: 'success'
+              })
+              that.setData({ confirmShow: false })
+              console.log('写入成功，记录ID：', res._id)
+            }).catch(err => {
+              wx.hideLoading()
+              wx.showToast({
+                title: '提交失败',
+                icon: 'none'
+              })
+              console.error('数据库写入失败：', err)
+            })
+          },
+      // 新增取消确认方法
+      onCancelConfirm() {
+        this.setData({ 
+          confirmShow: false,
+          showTimePicker: true // 返回时间选择器
+        });
+      },
 
   // 带星期的日期格式化
   formatDateWithWeekday(date) {
