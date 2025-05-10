@@ -166,58 +166,74 @@ Page(
 //   }
 // }
 // },
-//   // 点击预约记录按钮
-//   onShowRecords() {
-//     this.setData({ showRecordPopup: true })
-//     this.loadAppointments()
-//   },
-//   // 加载预约数据
-//   async loadAppointments() {
-//     try {
-//       this.setData({ isLoading: true })
+  // 点击预约记录按钮
+  jumpToAppointment() {
+    wx.navigateTo({
+      url: '/pages/appointment/index'
+    })
+  },
+// // 加载预约数据
+// loadAppointments() {
+//     const that = this;
+    
+//     // 显示加载状态
+//     this.setData({ isLoading: true });
   
-//       // 调用云函数时显式指定环境
-//       const { result } = await wx.cloud.callFunction({
-//         name: 'getOpenId',
-//         config: { env: '你的环境ID' } // 替换实际环境ID
-//       }).catch(err => {
-//         console.error('[云函数] 调用失败详细日志:', {
-//           errCode: err.errCode,
-//           errMsg: err.errMsg,
-//           requestID: err.requestID
-//         })
-//         throw new Error('获取用户信息失败，请检查网络')
-//       })
-  
-//       console.log('[调试] 云函数返回结果:', result)
-  
-//       // 严格校验返回结构
-//       if (!result || typeof result !== 'object') {
-//         throw new Error('云函数返回格式异常')
+//     // 获取用户 openid
+//     wx.cloud.callFunction({
+//       name: 'quickstartFunctions',
+//       data: {
+//         type: 'getOpenId'
 //       }
+//     }).then(openidRes => {
+//       const openid = openidRes.result.openid;
+      
+//       // 调用查询预约记录的云函数
+//       return wx.cloud.callFunction({
+//         name: 'quickstartFunctions',
+//         data: {
+//           type: 'selectRecord',
+//           collection: 'appointments',
+//           condition: { _openid: openid }
+//         }
+//       });
+//     }).then(res => {
+//       console.log('云函数返回数据:', res.result.data);
   
-//       const currentOpenid = result.OPENID // 注意大写
-  
-//       if (!currentOpenid || currentOpenid.length !== 28) {
-//         console.error('[异常] 无效的OPENID:', currentOpenid)
-//         throw new Error('用户身份信息不合法')
-//       }
-  
-//       // ...后续数据库查询代码...
-  
-//     } catch (err) {
-//       console.error('[完整错误日志]', {
-//         message: err.message,
-//         stack: err.stack,
-//         time: new Date().toISOString()
-//       })
-//       wx.showToast({
-//         title: err.message,
-//         icon: 'none',
-//         duration: 3000
-//       })
-//     } finally {
-//       this.setData({ isLoading: false })
-//     }
-//   },
+//       // 筛选有效预约（带容错处理）
+//       const filteredData = res.result.data.filter(item => {
+//         try {
+//           // 解析日期字符串（例如："5/9 周五"）
+//           const [monthDay] = item.date.split(' ');
+//           const [month, day] = monthDay.split('/').map(Number);
+          
+//           // 解析时间字符串（例如："16:00"）
+//           const [hours, minutes] = item.time.split(':').map(Number);
+      
+//           // 构建预约时间（假设为当前年）
+//           const appointmentDate = new Date();
+//           appointmentDate.setFullYear(new Date().getFullYear(), month - 1, day);
+//           appointmentDate.setHours(hours, minutes, 0, 0);
+      
+//           // 获取当前时间（含用户时区）
+//           const now = new Date();
+      
+//           // 比较时间（预约时间在当前之后）
+//           return appointmentDate > now;
+//         } catch (e) {
+//           console.error('时间解析失败:', item.date, item.time);
+//           return false;
+//         }
+//       });
+    
+//       this.setData({
+//         appointments: filteredData,
+//         isLoading: false
+//       });
+//     }).catch(err => {  // 补全 catch 逻辑
+//       console.error('加载失败:', err);
+//       this.setData({ isLoading: false });
+//       wx.showToast({ title: '数据加载失败', icon: 'none' });
+//     });
+//   },  
 });

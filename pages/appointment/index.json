@@ -1,0 +1,9 @@
+
+{
+    "usingComponents": {
+      "van-dialog": "@vant/weapp/dialog/index",
+      "van-toast": "@vant/weapp/toast/index"
+    },
+    "navigationBarTitleText": "我的预约",
+    "navigationStyle": "default"
+  }

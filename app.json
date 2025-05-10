@@ -1,14 +1,20 @@
 {
-  "tabBar": {"list": [{
-    "pagePath": "pages/index/index",
-    "text": "首页"
-  }, {
-    "pagePath": "pages/calendar/index",
-    "text": "预约日历"
-  }]},
+  "tabBar": {
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/calendar/index",
+        "text": "预约日历"
+      }
+    ]
+  },
   "pages": [
     "pages/index/index",
-    "pages/calendar/index"
+    "pages/calendar/index",
+    "pages/appointment/index"
   ],
   "window": {
     "navigationBarTextStyle": "black",
