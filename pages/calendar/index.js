@@ -100,7 +100,10 @@ Page(
             // 获取用户OpenID
             const that = this;
             wx.cloud.callFunction({
-              name: 'getOpenId'
+                name: 'quickstartFunctions',
+                data: {
+                  type: 'getOpenId'
+                }
             }).then(res => {
               // 构建数据对象
               
@@ -151,73 +154,70 @@ Page(
     this.setData({ showTimePicker: false });
   },
   
-// cloudfunctions/getOpenId/index.js(云函数)
-getOpenId() {
-    const cloud = require('wx-server-sdk')
-cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV }) // 自动继承当前环境
-
-exports.main = async (event, context) => {
-  const wxContext = cloud.getWXContext()
+// // cloudfunctions/getOpenId/index.js(云函数)
+// getOpenId() {
+// exports.main = async (event, context) => {
+//   const wxContext = cloud.getWXContext()
   
-  return {
-    OPENID: wxContext.OPENID, // 官方文档指定的大写字段名
-    APPID: wxContext.APPID,
-    UNIONID: wxContext.UNIONID
-  }
-}
-},
-  // 点击预约记录按钮
-  onShowRecords() {
-    this.setData({ showRecordPopup: true })
-    this.loadAppointments()
-  },
-  // 加载预约数据
-  async loadAppointments() {
-    try {
-      this.setData({ isLoading: true })
+//   return {
+//     OPENID: wxContext.OPENID, // 官方文档指定的大写字段名
+//     APPID: wxContext.APPID,
+//     UNIONID: wxContext.UNIONID
+//   }
+// }
+// },
+//   // 点击预约记录按钮
+//   onShowRecords() {
+//     this.setData({ showRecordPopup: true })
+//     this.loadAppointments()
+//   },
+//   // 加载预约数据
+//   async loadAppointments() {
+//     try {
+//       this.setData({ isLoading: true })
   
-      // 调用云函数时显式指定环境
-      const { result } = await wx.cloud.callFunction({
-        name: 'getOpenId',
-        config: { env: '你的环境ID' } // 替换实际环境ID
-      }).catch(err => {
-        console.error('[云函数] 调用失败详细日志:', {
-          errCode: err.errCode,
-          errMsg: err.errMsg,
-          requestID: err.requestID
-        })
-        throw new Error('获取用户信息失败，请检查网络')
-      })
+//       // 调用云函数时显式指定环境
+//       const { result } = await wx.cloud.callFunction({
+//         name: 'getOpenId',
+//         config: { env: '你的环境ID' } // 替换实际环境ID
+//       }).catch(err => {
+//         console.error('[云函数] 调用失败详细日志:', {
+//           errCode: err.errCode,
+//           errMsg: err.errMsg,
+//           requestID: err.requestID
+//         })
+//         throw new Error('获取用户信息失败，请检查网络')
+//       })
   
-      console.log('[调试] 云函数返回结果:', result)
+//       console.log('[调试] 云函数返回结果:', result)
   
-      // 严格校验返回结构
-      if (!result || typeof result !== 'object') {
-        throw new Error('云函数返回格式异常')
-      }
+//       // 严格校验返回结构
+//       if (!result || typeof result !== 'object') {
+//         throw new Error('云函数返回格式异常')
+//       }
   
-      const currentOpenid = result.OPENID // 注意大写
+//       const currentOpenid = result.OPENID // 注意大写
   
-      if (!currentOpenid || currentOpenid.length !== 28) {
-        console.error('[异常] 无效的OPENID:', currentOpenid)
-        throw new Error('用户身份信息不合法')
-      }
+//       if (!currentOpenid || currentOpenid.length !== 28) {
+//         console.error('[异常] 无效的OPENID:', currentOpenid)
+//         throw new Error('用户身份信息不合法')
+//       }
   
-      // ...后续数据库查询代码...
+//       // ...后续数据库查询代码...
   
-    } catch (err) {
-      console.error('[完整错误日志]', {
-        message: err.message,
-        stack: err.stack,
-        time: new Date().toISOString()
-      })
-      wx.showToast({
-        title: err.message,
-        icon: 'none',
-        duration: 3000
-      })
-    } finally {
-      this.setData({ isLoading: false })
-    }
-  },
+//     } catch (err) {
+//       console.error('[完整错误日志]', {
+//         message: err.message,
+//         stack: err.stack,
+//         time: new Date().toISOString()
+//       })
+//       wx.showToast({
+//         title: err.message,
+//         icon: 'none',
+//         duration: 3000
+//       })
+//     } finally {
+//       this.setData({ isLoading: false })
+//     }
+//   },
 });
