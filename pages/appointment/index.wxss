@@ -2,56 +2,75 @@
 /* 容器样式 */
 .container {
     height: 100vh;
+    margin: 2rpx;
+    padding: 3rpx;
     background: #f7f7f7;
-  }
-  
-  .record-card {
+}
+
+.record-card {
     background: #fff;
     margin: 20rpx;
     padding: 32rpx;
     border-radius: 16rpx;
-    box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.05);
-  }
-  
-  .location {
+    box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+.location {
     font-size: 36rpx;
     font-weight: 600;
     color: #333;
     display: block;
     margin-bottom: 16rpx;
-  }
-  
-  .time-info {
+}
+
+.time-info {
     display: flex;
     align-items: center;
     margin-bottom: 24rpx;
-  }
-  
-  .date-time {
+}
+
+.date-time {
     font-size: 28rpx;
     color: #666;
-  }
-  
-  .separator {
+}
+
+.separator {
     color: #ddd;
     margin: 0 12rpx;
-  }
-  
-  .action-area {
+}
+
+.action-area {
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-top: 1rpx solid #eee;
     padding-top: 24rpx;
-  }
-  
-  .status {
+}
+
+.status {
     font-size: 26rpx;
+}
+
+/* 不同状态颜色 */
+.status-0 {
+    /* 已预约 */
     color: #07c160;
-  }
-  
-  .delete-btn {
+    /* 绿色 */
+}
+
+.status-1 {
+    /* 已上课 */
+    color: #000000;
+    /* 黑色 */
+}
+
+.status-2 {
+    /* 已过期 */
+    color: #999999;
+    /* 灰色 */
+}
+
+.delete-btn {
     line-height: 1.4 !important;
     padding: 0 20rpx !important;
-  }
-  
+}
