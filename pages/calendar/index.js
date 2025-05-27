@@ -127,7 +127,7 @@ Page(
                         condition: {
                             openid: openid,
                             date: that.data.date,
-                            time: that.data.selectedTime
+                            time: that .data.selectedTime
                         }
                     }
                 }).then(checkRes => {

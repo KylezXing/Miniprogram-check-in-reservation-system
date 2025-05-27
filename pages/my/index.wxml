@@ -1,10 +1,15 @@
-<!--pages/my/index.wxml-->
-<!-- 登录状态 -->
-<view wx:if="{{isLoggedIn}}">
-  <text>手机号：{{phoneNumber}}</text>
-</view>
 
-<!-- 未登录状态 -->
-<view wx:else>
-  <button open-type="getPhoneNumber" bindgetphonenumber="onGetPhoneNumber">一键登录</button>
+<view class="container">
+  <!-- 登录按钮 -->
+  <button 
+    bindtap="loginin"
+    type="primary"
+  >
+    微信一键登录
+  </button>
+  
+  <!-- 提示信息 -->
+  <view wx:if="{{showTips}}" class="tips">
+    {{tipsText}}
+  </view>
 </view>

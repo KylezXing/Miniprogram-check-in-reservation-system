@@ -1,39 +1,20 @@
 Page({
     data: {
-      isLoggedIn: false,
-      phoneNumber: ''
+        // 功能页参数配置
+        functionalPageParams: {
+            type: 'userInfo', // 指定功能页类型
+            direct: true      // 直接跳转不弹窗
+        }
     },
-  
-    onGetPhoneNumber(e) {
-      if (e.detail.errMsg === 'getPhoneNumber:ok') {
-        // 获取微信登录凭证 code
-        wx.login({
-          success: (res) => {
-            const code = res.code;
-            // 将 code、加密数据发送到服务器解密
-            wx.request({
-              url: 'https://api.weixin.qq.com/wxa/business/getuserphonenumber?access_token=ACCESS_TOKEN',
-              method: 'POST',
-              data: {
-                code: code,
-                encryptedData: e.detail.encryptedData,
-                iv: e.detail.iv
-              },
-              success: (res) => {
-                if (res.data.phone) {
-                  this.setData({
-                    isLoggedIn: true,
-                    phoneNumber: res.data.phone
-                  });
-                }
-              }
-            });
-          }
+    loginin() {
+        wx.cloud.callFunction({
+          name: 'quickstartFunctions',
+          data: { type: 'getOpenId' }
+        }).then(res => {
+          console.log('云函数返回结果:', res.result); // 正确打印返回结果
+          return res.result; // 如果需要继续链式调用可以返回
+        }).catch(err => {
+          console.error('调用云函数失败:', err); // 错误处理
         });
-      } else {
-        // 用户拒绝授权
-        wx.showToast({ title: '授权失败', icon: 'none' });
-      }
-    }
-  });
-  
+      },
+})
