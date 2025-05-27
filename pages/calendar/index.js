@@ -114,7 +114,7 @@ Page(
                     date: that.data.date,
                     time: that.data.selectedTime,
                     openid: openid,
-                    createTime: db.serverDate(),
+                    createdAt: db.serverDate(),
                     bookStatus: 0     //0为已预约，1为已上课，2为已过期
                 };
 

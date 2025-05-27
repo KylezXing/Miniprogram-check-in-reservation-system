@@ -1,11 +1,8 @@
 {
   "usingComponents": {
     "van-calendar": "@vant/weapp/calendar/index",
-    "van-cell": "@vant/weapp/cell/index",
-    "van-cell-group": "@vant/weapp/cell-group/index",
     "van-button": "@vant/weapp/button/index",
     "van-popup": "@vant/weapp/popup/index",
-    "van-datetime-picker": "@vant/weapp/datetime-picker/index",
     "van-picker": "@vant/weapp/picker/index",
     "van-dialog": "@vant/weapp/dialog/index"
   }
