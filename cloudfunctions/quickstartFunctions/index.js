@@ -9,6 +9,8 @@ const genMpQrcode = require('./genMpQrcode/index');
 const deleteRecord = require('./deleteRecord/index');
 const selectOpenId = require('./selectOpenId/index');
 const getAccessToken = require('./getAccessToken/index');
+const updateUserInfo = require('./updateUserInfo/index');
+
 // 云函数入口函数
 exports.main = async (event, context) => {
     switch (event.type) {
@@ -34,7 +36,9 @@ exports.main = async (event, context) => {
             return await selectOpenId.main(event, context);
         case 'getAccessToken':
             return await getAccessToken.main(event, context);
-
+        case 'updateUserInfo':
+            return await updateUserInfo.main(event, context);
+            
     }
 };
 

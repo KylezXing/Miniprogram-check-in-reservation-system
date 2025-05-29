@@ -1,15 +1,21 @@
-
 <view class="container">
-  <!-- 登录按钮 -->
-  <button 
-    bindtap="loginin"
-    type="primary"
-  >
-    微信一键登录
-  </button>
-  
-  <!-- 提示信息 -->
-  <view wx:if="{{showTips}}" class="tips">
-    {{tipsText}}
-  </view>
+<van-cell-group>
+    <van-cell 
+      title="手机号" 
+      value="{{phone ? '已绑定' : '未绑定'}}" 
+    />
+
+    <van-button wx:if="{{!phone}}" plain type="primary" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">朴素按钮</van-button>
+    <van-cell 
+      title="姓名" 
+      value="{{name || '未设置'}}" 
+      bind:click="editName"
+      is-link
+    />
+    <van-cell 
+      title="剩余课时" 
+      value="{{remainClasses}}" 
+    />
+  </van-cell-group>
 </view>
+

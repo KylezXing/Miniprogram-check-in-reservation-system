@@ -4,31 +4,8 @@ App({
   //配置全局变量（多页面使用）
   globalData: {
     // 登录信息
-    token: ''
-  },
-
-  checkLogin() {
- 
-    //全局变量或缓存中存在token，直接赋值，否则重新登录
-    var token = this.globalData.token
-    if (!token) {
-      token = wx.getStorageSync('token')
-      if (token) {
-        this.globalData.token = token;
-   
-      } else {
-        wx.showToast({
-          title: '请先登录后再进行预约操作哦',
-          icon: 'none'
-        })
-   
-        setTimeout(() => {
-          wx.reLaunch({
-            url: '/pages/login/login',
-          })
-        }, 2000);
-      }
-    }
+    userInfo: null,
+    accesstoken: ""
   },
     onLaunch: function () {
       if (!wx.cloud) {
@@ -45,7 +22,29 @@ App({
       }
   
       this.globalData = {};
-      this.checkLogin()
+      this.getUserOpenId()
     },
+
+    // 示例：发送模板消息的云函数
+    getUserOpenId() {
+        wx.cloud.callFunction({
+            name: 'quickstartFunctions',
+            data: { type: 'getOpenId' },
+          success: res => {
+            this.globalData.userInfo = res.result
+            // 如果是老用户，直接使用返回的数据
+            if (!res.result.isNewUser) {
+              return
+            }
+            // 新用户初始化数据
+            this.globalData.userInfo = {
+              ...res.result,
+              phone: '',
+              name: '',
+              remainClasses: 0
+            }
+          }
+        })
+      }
   });
   
