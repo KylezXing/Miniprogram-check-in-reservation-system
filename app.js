@@ -5,7 +5,7 @@ App({
   globalData: {
     // 登录信息
     userInfo: null,
-    accesstoken: ""
+    accesstoken: null
   },
     onLaunch: function () {
       if (!wx.cloud) {
@@ -22,7 +22,8 @@ App({
       }
   
       this.globalData = {};
-      this.getUserOpenId()
+      this.getUserOpenId();
+    //   this.getAccessToken()
     },
 
     // 示例：发送模板消息的云函数
@@ -45,6 +46,14 @@ App({
             }
           }
         })
-      }
+      },
+    //   getAccessToken() {
+    //     wx.cloud.callFunction({
+    //         name: 'getAccessToken',
+    //       success: res => {
+    //         console.log("获取成功")
+    //         return
+    //         }
+    //     })
+    //   }
   });
-  

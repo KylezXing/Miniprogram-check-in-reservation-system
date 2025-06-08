@@ -2,6 +2,7 @@
 import Toast from '@vant/weapp/toast/toast';
 const db = wx.cloud.database()
 // const appointments = db.collection('appointments')
+const app = getApp();
 Page(
     {
         data: {
@@ -121,13 +122,15 @@ Page(
                 // 检查是否存在重复预约
                 return wx.cloud.callFunction({
                     name: 'quickstartFunctions',
+                    
                     data: {
                         type: 'selectRecord',
                         collection: 'appointments',
+                        
                         condition: {
                             openid: openid,
                             date: that.data.date,
-                            time: that .data.selectedTime
+                            time: that.data.selectedTime
                         }
                     }
                 }).then(checkRes => {
@@ -139,70 +142,83 @@ Page(
                         data: appointmentData
                     });
                 });
-            }).then(res => {
-                wx.hideLoading();
-                wx.showToast({
-                    title: '预约成功',
-                    icon: 'success'
+            }).then(() => {
+                // 预约成功后发送模板消息
+                return wx.cloud.callFunction({
+                    name: 'sendTemplateMessage',
+                    data: {
+                        openid: app.globalData.userInfo.openid,
+                        templateId: '_BL2SC1IW0HrYkyoDg_MKnkIXuys4qHCn5mrAbNZ5ws',
+                        data: {
+                            keyword1: { value: `${this.data.date} ${this.data.selectedTime}`}, // 预约日期
+                            keyword2: { value: app.globalData.userInfo.name }, // 预约时间
+                        },
+                    }
                 });
-                that.setData({ confirmShow: false });
-                console.log('写入成功，记录ID：', res._id);
-            }).catch(err => {
-                wx.hideLoading();
-
-                if (err.code === 'DUPLICATE') {
-                    // 处理重复预约的情况
-                    wx.showToast({
-                        title: err.message,
-                        icon: 'none'
-                    });
-                } else {
-                    // 其他错误处理
-                    wx.showToast({
-                        title: '提交失败',
-                        icon: 'none'
-                    });
-                    console.error('操作失败：', err);
-                }
+            }).then(res => {
+            wx.hideLoading();
+            wx.showToast({
+                title: '预约成功',
+                icon: 'success'
             });
-        },
-        // 新增取消确认方法
-        onCancelConfirm() {
-            this.setData({
-                confirmShow: false,
-                showTimePicker: true // 返回时间选择器
-            });
-        },
+            that.setData({ confirmShow: false });
+            console.log('写入成功，记录ID：', res._id);
+        }).catch(err => {
+            wx.hideLoading();
 
-        // 带星期的日期格式化
-        formatDateWithWeekday(date) {
-            const weekdays = ["日", "一", "二", "三", "四", "五", "六"];
-            return `${date.getMonth() + 1}/${date.getDate()} 周${weekdays[date.getDay()]}`;
+            if (err.code === 'DUPLICATE') {
+                // 处理重复预约的情况
+                wx.showToast({
+                    title: err.message,
+                    icon: 'none'
+                });
+            } else {
+                // 其他错误处理
+                wx.showToast({
+                    title: '提交失败',
+                    icon: 'none'
+                });
+                console.error('操作失败：', err);
+            }
+        });
         },
+// 新增取消确认方法
+onCancelConfirm() {
+    this.setData({
+        confirmShow: false,
+        showTimePicker: true // 返回时间选择器
+    });
+},
 
-        // 关闭时间选择
-        onPickerClose() {
-            this.setData({ showTimePicker: false });
-        },
+// 带星期的日期格式化
+formatDateWithWeekday(date) {
+    const weekdays = ["日", "一", "二", "三", "四", "五", "六"];
+    return `${date.getMonth() + 1}/${date.getDate()} 周${weekdays[date.getDay()]}`;
+},
 
-        // // cloudfunctions/getOpenId/index.js(云函数)
-        // getOpenId() {
-        // exports.main = async (event, context) => {
-        //   const wxContext = cloud.getWXContext()
+// 关闭时间选择
+onPickerClose() {
+    this.setData({ showTimePicker: false });
+},
 
-        //   return {
-        //     OPENID: wxContext.OPENID, // 官方文档指定的大写字段名
-        //     APPID: wxContext.APPID,
-        //     UNIONID: wxContext.UNIONID
-        //   }
-        // }
-        // },
-        // 点击预约记录按钮
-        jumpToAppointment() {
-            wx.navigateTo({
-                url: '/pages/appointment/index'
-            })
-        },
+// // cloudfunctions/getOpenId/index.js(云函数)
+// getOpenId() {
+// exports.main = async (event, context) => {
+//   const wxContext = cloud.getWXContext()
+
+//   return {
+//     OPENID: wxContext.OPENID, // 官方文档指定的大写字段名
+//     APPID: wxContext.APPID,
+//     UNIONID: wxContext.UNIONID
+//   }
+// }
+// },
+// 点击预约记录按钮
+jumpToAppointment() {
+    wx.navigateTo({
+        url: '/pages/appointment/index'
+    })
+},
         // // 加载预约数据
         // loadAppointments() {
         //     const that = this;

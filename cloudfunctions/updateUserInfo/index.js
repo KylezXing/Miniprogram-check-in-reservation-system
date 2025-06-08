@@ -22,3 +22,4 @@ exports.main = async (event, context) => {
     return { code: 500, msg: "更新失败", error: err }
   }
 };
+
