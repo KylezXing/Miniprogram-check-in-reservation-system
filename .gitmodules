@@ -1,0 +1,3 @@
+[submodule "firmware"]
+	path = firmware
+	url = https://github.com/KylezXing/esp32-check-in-firmware
