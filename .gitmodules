@@ -1,3 +1,6 @@
 [submodule "firmware"]
 	path = firmware
 	url = https://github.com/KylezXing/esp32-check-in-firmware
+[submodule "flask"]
+	path = flask
+	url = https://github.com/KylezXing/Transfer-Flask-Configuration-for-Check-in-System-Hardware-and-Mini-Programs.git
